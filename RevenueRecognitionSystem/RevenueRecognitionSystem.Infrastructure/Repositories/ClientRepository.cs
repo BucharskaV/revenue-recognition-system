@@ -15,8 +15,17 @@ public class ClientRepository : IClientRepository
     }
     
     public async Task<Client?> GetClientByIdAsync(int id) => await _context.Clients.FirstOrDefaultAsync(c => c.Id == id);
-    
-    public async Task<IEnumerable<Client>> GetClientsAsync() => await _context.Clients.ToListAsync();
+    public async Task<Individual?> GetIndividualByIdAsync(int id)=> await _context.Individuals.FirstOrDefaultAsync(c => c.Id == id);
+    public async Task<Company?> GetCompanyByIdAsync(int id)=> await _context.Companies.FirstOrDefaultAsync(c => c.Id == id);
+
+    public Task<Individual?> GetIndividualByPeselAsync(string pesel) => _context.Individuals.FirstOrDefaultAsync(c => c.PESEL == pesel);
+
+    public Task<Company?> GetCompanyByKrsNumberAsync(string krs) => _context.Companies.FirstOrDefaultAsync(c => c.KRSNumber == krs);
+
+    public async Task<IEnumerable<Client>> GetClientsWithSoftwareSystemsAsync()
+    {
+        return await _context.Clients.Include(c => c.SoftwareSystems).ToListAsync();
+    }
 
     public async Task AddAsync(Client client)
     {

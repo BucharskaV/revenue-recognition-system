@@ -7,9 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Contracts\Responses\" />
-      <Folder Include="Implementations\" />
-      <Folder Include="Interfaces\" />
       <Folder Include="Validators\" />
     </ItemGroup>
 

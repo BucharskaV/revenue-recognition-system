@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RevenueRecognitionSystem.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using RevenueRecognitionSystem.Infrastructure.Data;
 namespace RevenueRecognitionSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260202200320_SoftwareSystemAdd")]
+    partial class SoftwareSystemAdd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -190,7 +193,7 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 10,
+                            Id = 1,
                             Address = "Warsaw, ul. Centralna 10",
                             Email = "jan.kowalski@example.com",
                             PhoneNumber = "123456789",
@@ -201,7 +204,7 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = 20,
+                            Id = 2,
                             Address = "Krakow, ul. Zielona 5",
                             Email = "anna.nowak@example.com",
                             PhoneNumber = "987654321",

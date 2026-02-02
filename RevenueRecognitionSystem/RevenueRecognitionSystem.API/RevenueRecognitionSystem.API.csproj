@@ -15,13 +15,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\" />
       <Folder Include="Filters\" />
       <Folder Include="Middleware\" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\RevenueRecognitionSystem.Infrastructure\RevenueRecognitionSystem.Infrastructure.csproj" />
+      <ProjectReference Include="..\RevenueRecognitionSystem.Services\RevenueRecognitionSystem.Services.csproj" />
     </ItemGroup>
 
 </Project>
