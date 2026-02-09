@@ -29,7 +29,7 @@ public class ClientService : IClientService
 
     public async Task<IEnumerable<GetAllClientsResponse>> GetAllClientsAsync()
     {
-        var clients = await _clientRepository.GetClientsWithSoftwareSystemsAsync();
+        var clients = await _clientRepository.GetClientsAsync();
         return clients.Select(ClientMapper.ToResponse);
     }
 

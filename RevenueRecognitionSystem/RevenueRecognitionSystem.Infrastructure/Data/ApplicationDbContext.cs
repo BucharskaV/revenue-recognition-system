@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RevenueRecognitionSystem.Domain.Entities;
+using RevenueRecognitionSystem.Domain.Enums;
 using RevenueRecognitionSystem.Infrastructure.Data.Configurations;
 
 namespace RevenueRecognitionSystem.Infrastructure.Data;
@@ -11,7 +12,9 @@ public class ApplicationDbContext : DbContext
     public DbSet<Client> Clients { get; set; }
     public DbSet<Individual> Individuals { get; set; }
     public DbSet<Company> Companies { get; set; }
-    public DbSet<SoftwareSystem> SoftwareSystems { get; set; }
+    public DbSet<SoftwareSystem?> SoftwareSystems { get; set; }
+    public DbSet<Discount> Discounts { get; set; }
+    public DbSet<Contract> Contracts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -19,53 +22,62 @@ public class ApplicationDbContext : DbContext
         modelBuilder.ApplyConfiguration(new IndividualConfiguration());
         modelBuilder.ApplyConfiguration(new CompanyConfiguration());
         modelBuilder.ApplyConfiguration(new SoftwareSystemConfiguration());
+        modelBuilder.ApplyConfiguration(new DiscountConfiguration());
+        modelBuilder.ApplyConfiguration(new ContractConfiguration());
             
-        modelBuilder.Entity<Individual>().HasData(
-            new Individual
-            {
-                Id = 10,
-                FirstName = "Jan",
-                LastName = "Kowalski",
-                Address = "Warsaw, ul. Centralna 10",
-                Email = "jan.kowalski@example.com",
-                PhoneNumber = "123456789",
-                PESEL = "90010112345",
-                IsDeleted = false
-            },
-            new Individual
-            {
-                Id = 20,
-                FirstName = "Anna",
-                LastName = "Nowak",
-                Address = "Krakow, ul. Zielona 5",
-                Email = "anna.nowak@example.com",
-                PhoneNumber = "987654321",
-                PESEL = "85050567890",
-                IsDeleted = false
-            }
-        );
+        insertInitialData(modelBuilder);
+    }
 
+    private void insertInitialData(ModelBuilder modelBuilder)
+    {
         modelBuilder.Entity<Company>().HasData(
-            new Company
+            new
             {
                 Id = 3,
-                CompanyName = "TechSoft Ltd.",
                 Address = "Gdansk, ul. Portowa 12",
                 Email = "info@techsoft.com",
                 PhoneNumber = "111222333",
-                KRSNumber = "0000123456"
+                CompanyName = "TechSoft Ltd.",
+                KRSNumber = "0000123456",
+                ClientType = "Company"
             },
-            new Company
+            new
             {
                 Id = 4,
-                CompanyName = "EduCorp Sp. z o.o.",
                 Address = "Poznan, ul. Edukacyjna 7",
                 Email = "contact@educorp.com",
                 PhoneNumber = "444555666",
-                KRSNumber = "0000654321"
+                CompanyName = "EduCorp Sp. z o.o.",
+                KRSNumber = "0000654321",
+                ClientType = "Company"
             }
         );
-
+        modelBuilder.Entity<Individual>().HasData(
+            new
+            {
+                Id = 10,
+                Address = "Warsaw, ul. Centralna 10",
+                Email = "jan.kowalski@example.com",
+                PhoneNumber = "123456789",
+                FirstName = "Jan",
+                LastName = "Kowalski",
+                PESEL = "90010112345",
+                IsDeleted = false,
+                ClientType = "Individual"
+            },
+            new
+            {
+                Id = 20,
+                Address = "Krakow, ul. Zielona 5",
+                Email = "anna.nowak@example.com",
+                PhoneNumber = "987654321",
+                FirstName = "Anna",
+                LastName = "Nowak",
+                PESEL = "85050567890",
+                IsDeleted = false,
+                ClientType = "Individual"
+            }
+        );
         modelBuilder.Entity<SoftwareSystem>().HasData(
             new SoftwareSystem
             {
@@ -73,10 +85,8 @@ public class ApplicationDbContext : DbContext
                 Name = "FinTrack",
                 Description = "Financial software",
                 CurrentVersion = "1.2.3",
-                Category = Domain.Enums.SoftwareCategory.Finance,
-                UpfrontPrice = 499.99m,
-                MonthlySubscriptionPrice = 29.99m,
-                IdClient = 10
+                Category = SoftwareCategory.Finance,
+                OneYearLicensePrice = 5000
             },
             new SoftwareSystem
             {
@@ -84,11 +94,22 @@ public class ApplicationDbContext : DbContext
                 Name = "LearnMate",
                 Description = "Education platform",
                 CurrentVersion = "3.0.0",
-                Category = Domain.Enums.SoftwareCategory.Education,
-                UpfrontPrice = null,
-                MonthlySubscriptionPrice = 19.99m,
-                IdClient = 4
+                Category = SoftwareCategory.Education,
+                OneYearLicensePrice = 11000
             }
         );
+        modelBuilder.Entity<Discount>().HasData(
+            new Discount
+            {
+                Id = 1,
+                Name = "Black Friday Discount",
+                Percentage = 10,
+                StartDate = new DateTime(2026, 1, 1),
+                EndDate = new DateTime(2026, 2, 1),
+                Target = DiscountTarget.Subscription,
+                SoftwareSystemId = 1
+            }
+        );
+
     }
 }

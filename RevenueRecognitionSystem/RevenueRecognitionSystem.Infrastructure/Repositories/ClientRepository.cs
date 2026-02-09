@@ -22,14 +22,14 @@ public class ClientRepository : IClientRepository
 
     public Task<Company?> GetCompanyByKrsNumberAsync(string krs) => _context.Companies.FirstOrDefaultAsync(c => c.KRSNumber == krs);
 
-    public async Task<IEnumerable<Client>> GetClientsWithSoftwareSystemsAsync()
+    public async Task<IEnumerable<Client>> GetClientsAsync()
     {
-        return await _context.Clients.Include(c => c.SoftwareSystems).ToListAsync();
+        return await _context.Clients.ToListAsync();
     }
 
     public async Task AddAsync(Client client)
     {
-        _context.Clients.AddAsync(client);
+        await _context.Clients.AddAsync(client);
         await _context.SaveChangesAsync();
     }
 

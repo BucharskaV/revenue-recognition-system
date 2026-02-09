@@ -40,18 +40,7 @@ public static class ClientMapper
             Id = client.Id,
             Address = client.Address,
             Email = client.Email,
-            PhoneNumber = client.PhoneNumber,
-            SoftwareSystems = client.SoftwareSystems
-                .Select(s => new SoftwareSystemDto
-                {
-                    Id = s.Id,
-                    Name = s.Name,
-                    Description = s.Description,
-                    CurrentVersion = s.CurrentVersion,
-                    Category = s.Category,
-                    UpfrontPrice = s.UpfrontPrice,
-                    MonthlySubscriptionPrice = s.MonthlySubscriptionPrice
-                }).ToList()
+            PhoneNumber = client.PhoneNumber
         };
     }
 }

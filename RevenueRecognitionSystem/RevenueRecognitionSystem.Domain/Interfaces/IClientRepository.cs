@@ -9,7 +9,8 @@ public interface IClientRepository
     Task<Company?> GetCompanyByIdAsync(int id);
     Task<Individual?> GetIndividualByPeselAsync(string pesel);
     Task<Company?> GetCompanyByKrsNumberAsync(string krs);
-    Task<IEnumerable<Client>> GetClientsWithSoftwareSystemsAsync();
+    Task<IEnumerable<Client>> GetClientsAsync();
     Task AddAsync(Client client);
     Task UpdateAsync(Client client);
+    
 }

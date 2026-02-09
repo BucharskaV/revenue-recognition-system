@@ -23,9 +23,9 @@ public class ClientConfiguration : IEntityTypeConfiguration<Client>
             .HasValue<Company>("Company")
             .HasValue<Individual>("Individual")
             .IsComplete();
-        b.HasMany(c => c.SoftwareSystems)
+        b.HasMany(c => c.Contracts)
             .WithOne(e => e.Client)
-            .HasForeignKey(e => e.IdClient)
+            .HasForeignKey(e => e.ClientId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

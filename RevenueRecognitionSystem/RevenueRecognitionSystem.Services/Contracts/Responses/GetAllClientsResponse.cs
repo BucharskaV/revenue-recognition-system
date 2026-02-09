@@ -18,6 +18,5 @@ public class SoftwareSystemDto
     public string Description { get; set; } = string.Empty;
     public string CurrentVersion { get; set; } = string.Empty;
     public SoftwareCategory Category { get; set; }
-    public decimal? UpfrontPrice { get; set; }
-    public decimal? MonthlySubscriptionPrice { get; set; }
+    public decimal OneYearLicensePrice { get; set; }
 }

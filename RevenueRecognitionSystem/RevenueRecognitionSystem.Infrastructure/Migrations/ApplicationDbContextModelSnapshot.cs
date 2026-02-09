@@ -59,6 +59,54 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                     b.UseTphMappingStrategy();
                 });
 
+            modelBuilder.Entity("RevenueRecognitionSystem.Domain.Entities.Discount", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<decimal>("Percentage")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("SoftwareSystemId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("Target")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SoftwareSystemId");
+
+                    b.ToTable("Discounts", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            EndDate = new DateTime(2026, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Black Friday Discount",
+                            Percentage = 10m,
+                            SoftwareSystemId = 1,
+                            StartDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Target = 2
+                        });
+                });
+
             modelBuilder.Entity("RevenueRecognitionSystem.Domain.Entities.SoftwareSystem", b =>
                 {
                     b.Property<int>("Id")
@@ -70,6 +118,9 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                     b.Property<int>("Category")
                         .HasColumnType("int");
 
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CurrentVersion")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -79,9 +130,6 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
-
-                    b.Property<int>("IdClient")
-                        .HasColumnType("int");
 
                     b.Property<decimal?>("MonthlySubscriptionPrice")
                         .HasPrecision(18, 2)
@@ -98,18 +146,18 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdClient");
+                    b.HasIndex("ClientId");
 
-                    b.ToTable("SoftwareSystems");
+                    b.ToTable("SoftwareSystems", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = 1,
                             Category = 1,
+                            ClientId = 10,
                             CurrentVersion = "1.2.3",
                             Description = "Financial software",
-                            IdClient = 1,
                             MonthlySubscriptionPrice = 29.99m,
                             Name = "FinTrack",
                             UpfrontPrice = 499.99m
@@ -118,9 +166,9 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                         {
                             Id = 2,
                             Category = 2,
+                            ClientId = 4,
                             CurrentVersion = "3.0.0",
                             Description = "Education platform",
-                            IdClient = 4,
                             MonthlySubscriptionPrice = 19.99m,
                             Name = "LearnMate"
                         });
@@ -147,6 +195,7 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                         {
                             Id = 3,
                             Address = "Gdansk, ul. Portowa 12",
+                            ClientType = "Company",
                             Email = "info@techsoft.com",
                             PhoneNumber = "111222333",
                             CompanyName = "TechSoft Ltd.",
@@ -156,6 +205,7 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                         {
                             Id = 4,
                             Address = "Poznan, ul. Edukacyjna 7",
+                            ClientType = "Company",
                             Email = "contact@educorp.com",
                             PhoneNumber = "444555666",
                             CompanyName = "EduCorp Sp. z o.o.",
@@ -192,6 +242,7 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                         {
                             Id = 10,
                             Address = "Warsaw, ul. Centralna 10",
+                            ClientType = "Individual",
                             Email = "jan.kowalski@example.com",
                             PhoneNumber = "123456789",
                             FirstName = "Jan",
@@ -203,6 +254,7 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                         {
                             Id = 20,
                             Address = "Krakow, ul. Zielona 5",
+                            ClientType = "Individual",
                             Email = "anna.nowak@example.com",
                             PhoneNumber = "987654321",
                             FirstName = "Anna",
@@ -212,11 +264,22 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("RevenueRecognitionSystem.Domain.Entities.Discount", b =>
+                {
+                    b.HasOne("RevenueRecognitionSystem.Domain.Entities.SoftwareSystem", "SoftwareSystem")
+                        .WithMany("Discounts")
+                        .HasForeignKey("SoftwareSystemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SoftwareSystem");
+                });
+
             modelBuilder.Entity("RevenueRecognitionSystem.Domain.Entities.SoftwareSystem", b =>
                 {
                     b.HasOne("RevenueRecognitionSystem.Domain.Entities.Client", "Client")
                         .WithMany("SoftwareSystems")
-                        .HasForeignKey("IdClient")
+                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -226,6 +289,11 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
             modelBuilder.Entity("RevenueRecognitionSystem.Domain.Entities.Client", b =>
                 {
                     b.Navigation("SoftwareSystems");
+                });
+
+            modelBuilder.Entity("RevenueRecognitionSystem.Domain.Entities.SoftwareSystem", b =>
+                {
+                    b.Navigation("Discounts");
                 });
 #pragma warning restore 612, 618
         }
