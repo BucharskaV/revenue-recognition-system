@@ -13,12 +13,33 @@ public class ContractRepository : IContractRepository
     {
         _context = context;
     }
-    
+
+    public async Task<IEnumerable<Contract>> GetAllAsync()
+    {
+        return await _context.Contracts
+            .Include(c => c.Client)
+            .Include(c => c.SoftwareSystem)
+            .ToListAsync();
+    }
+
+    public async Task<Contract?> GetContractWithPaymentByContractIdAsync(int contractId)
+    {
+        return await _context.Contracts
+            .Include(c => c.Payments)
+            .FirstOrDefaultAsync(c => c.Id == contractId);
+    }
+
     public async Task AddAsync(Contract contract)
     {
-        await _context.Contracts.AddAsync(contract);
+        _context.Contracts.Add(contract);
         await _context.SaveChangesAsync();
-    } 
+    }
+
+    public async Task AddPaymentAsync(Payment payment)
+    {
+        _context.Payments.Add(payment);
+        await _context.SaveChangesAsync();
+    }
 
     public async Task<bool> HasAnyPreviousContractsAsync(int clientId)
     {
@@ -35,5 +56,25 @@ public class ContractRepository : IContractRepository
                 !c.IsPaid 
                 || (c.IsPaid && c.EndDate >= now)
                 )); 
+    }
+
+    public async Task<Contract?> GetContractByIdAsync(int contractId)
+    {
+        return await _context.Contracts.FirstOrDefaultAsync(c => c.Id == contractId);
+    }
+
+    public async Task DeleteAsync(int contractId)
+    {
+        var contract = await _context.Contracts.FindAsync(contractId);
+        if (contract is not null)
+        {
+            _context.Contracts.Remove(contract);
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task SaveChangesAsync()
+    {
+        await _context.SaveChangesAsync();
     }
 }

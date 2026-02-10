@@ -28,5 +28,9 @@ public class ContractConfiguration : IEntityTypeConfiguration<Contract>
         b.Property(c => c.UpdateYears)
             .IsRequired()
             .HasColumnType("int");
+        b.HasMany(c => c.Payments)
+            .WithOne(e => e.Contract)
+            .HasForeignKey(e => e.ContractId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

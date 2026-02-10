@@ -29,7 +29,7 @@ public class ClientRepository : IClientRepository
 
     public async Task AddAsync(Client client)
     {
-        await _context.Clients.AddAsync(client);
+        _context.Clients.Add(client);
         await _context.SaveChangesAsync();
     }
 

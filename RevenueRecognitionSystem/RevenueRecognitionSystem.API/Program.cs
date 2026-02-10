@@ -11,8 +11,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<IContractRepository, ContractRepository>();
+builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
+builder.Services.AddScoped<ISoftwareRepository, SoftwareRepository>();
 
 builder.Services.AddScoped<IClientService, ClientService>();
+builder.Services.AddScoped<IContractService, ContractService>();
 
 builder.Services.AddControllers();
 
