@@ -83,11 +83,9 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<decimal>("Price")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("SoftwareSystemId")
-                        .HasMaxLength(20)
                         .HasColumnType("int");
 
                     b.Property<string>("SoftwareVersion")
@@ -113,42 +111,42 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                         {
                             Id = 1,
                             ClientId = 1,
-                            CreatedAt = new DateTime(2026, 2, 10, 20, 38, 4, 695, DateTimeKind.Local).AddTicks(8663),
-                            EndDate = new DateTime(2026, 2, 20, 20, 38, 4, 695, DateTimeKind.Local).AddTicks(8713),
+                            CreatedAt = new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1575),
+                            EndDate = new DateTime(2026, 3, 4, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1627),
                             IsCancelled = false,
                             IsPaid = true,
                             Price = 4500m,
                             SoftwareSystemId = 1,
                             SoftwareVersion = "1.0",
-                            StartDate = new DateTime(2026, 2, 10, 20, 38, 4, 695, DateTimeKind.Local).AddTicks(8711),
+                            StartDate = new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1626),
                             UpdateYears = 1
                         },
                         new
                         {
                             Id = 2,
                             ClientId = 2,
-                            CreatedAt = new DateTime(2026, 2, 10, 20, 38, 4, 695, DateTimeKind.Local).AddTicks(8720),
-                            EndDate = new DateTime(2046, 2, 10, 20, 38, 4, 695, DateTimeKind.Local).AddTicks(8722),
+                            CreatedAt = new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1635),
+                            EndDate = new DateTime(2046, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1638),
                             IsCancelled = false,
                             IsPaid = true,
                             Price = 6000m,
                             SoftwareSystemId = 2,
                             SoftwareVersion = "2.1",
-                            StartDate = new DateTime(2026, 2, 10, 20, 38, 4, 695, DateTimeKind.Local).AddTicks(8721),
+                            StartDate = new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1636),
                             UpdateYears = 2
                         },
                         new
                         {
                             Id = 3,
                             ClientId = 3,
-                            CreatedAt = new DateTime(2026, 2, 10, 20, 38, 4, 695, DateTimeKind.Local).AddTicks(8729),
-                            EndDate = new DateTime(2036, 2, 10, 20, 38, 4, 695, DateTimeKind.Local).AddTicks(8732),
+                            CreatedAt = new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1644),
+                            EndDate = new DateTime(2036, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1646),
                             IsCancelled = false,
                             IsPaid = true,
                             Price = 8500m,
                             SoftwareSystemId = 3,
                             SoftwareVersion = "3.2",
-                            StartDate = new DateTime(2026, 2, 10, 20, 38, 4, 695, DateTimeKind.Local).AddTicks(8730),
+                            StartDate = new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1645),
                             UpdateYears = 1
                         });
                 });
@@ -170,7 +168,6 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("Percentage")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("SoftwareSystemId")
@@ -300,7 +297,6 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Amount")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ContractId")
@@ -343,7 +339,6 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("OneYearLicensePrice")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
@@ -441,6 +436,105 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                             Name = "SecureIT",
                             OneYearLicensePrice = 10000m
                         });
+                });
+
+            modelBuilder.Entity("RevenueRecognitionSystem.Domain.Entities.Subscription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsCancelled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<int>("RenewalPeriodInMonths")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("RenewalPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("SoftwareSystemId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("SoftwareSystemId");
+
+                    b.ToTable("Subscriptions", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ClientId = 1,
+                            IsCancelled = true,
+                            Name = "Monthly Subscription",
+                            RenewalPeriodInMonths = 1,
+                            RenewalPrice = 900m,
+                            SoftwareSystemId = 1,
+                            StartDate = new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1670)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ClientId = 2,
+                            IsCancelled = true,
+                            Name = "Monthly Subscription",
+                            RenewalPeriodInMonths = 1,
+                            RenewalPrice = 1200m,
+                            SoftwareSystemId = 2,
+                            StartDate = new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1674)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ClientId = 3,
+                            IsCancelled = true,
+                            Name = "2 Years Subscription",
+                            RenewalPeriodInMonths = 24,
+                            RenewalPrice = 8000m,
+                            SoftwareSystemId = 3,
+                            StartDate = new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1679)
+                        });
+                });
+
+            modelBuilder.Entity("RevenueRecognitionSystem.Domain.Entities.SubscriptionPayment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("SubscriptionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubscriptionId");
+
+                    b.ToTable("SubscriptionPayments", (string)null);
                 });
 
             modelBuilder.Entity("RevenueRecognitionSystem.Domain.Entities.Company", b =>
@@ -750,9 +844,41 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                     b.Navigation("Contract");
                 });
 
+            modelBuilder.Entity("RevenueRecognitionSystem.Domain.Entities.Subscription", b =>
+                {
+                    b.HasOne("RevenueRecognitionSystem.Domain.Entities.Client", "Client")
+                        .WithMany("Subscriptions")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RevenueRecognitionSystem.Domain.Entities.SoftwareSystem", "SoftwareSystem")
+                        .WithMany("Subscriptions")
+                        .HasForeignKey("SoftwareSystemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("SoftwareSystem");
+                });
+
+            modelBuilder.Entity("RevenueRecognitionSystem.Domain.Entities.SubscriptionPayment", b =>
+                {
+                    b.HasOne("RevenueRecognitionSystem.Domain.Entities.Subscription", "Subscription")
+                        .WithMany("SubscriptionPayments")
+                        .HasForeignKey("SubscriptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Subscription");
+                });
+
             modelBuilder.Entity("RevenueRecognitionSystem.Domain.Entities.Client", b =>
                 {
                     b.Navigation("Contracts");
+
+                    b.Navigation("Subscriptions");
                 });
 
             modelBuilder.Entity("RevenueRecognitionSystem.Domain.Entities.Contract", b =>
@@ -765,6 +891,13 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                     b.Navigation("Contracts");
 
                     b.Navigation("Discounts");
+
+                    b.Navigation("Subscriptions");
+                });
+
+            modelBuilder.Entity("RevenueRecognitionSystem.Domain.Entities.Subscription", b =>
+                {
+                    b.Navigation("SubscriptionPayments");
                 });
 #pragma warning restore 612, 618
         }

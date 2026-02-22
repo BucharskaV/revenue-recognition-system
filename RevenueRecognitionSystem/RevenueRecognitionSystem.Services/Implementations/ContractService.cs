@@ -66,8 +66,7 @@ public class ContractService : IContractService
             price -= price * (maxDiscount / 100m);
         }
         
-        var isReturning = await _contractRepository
-            .HasAnyPreviousContractsAsync(request.ClientId);
+        var isReturning = await _clientRepository.IsLoyalClientAsync(request.ClientId);
         if (isReturning)
         {
             price -= price * 0.05m;

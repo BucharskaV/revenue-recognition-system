@@ -26,6 +26,14 @@ public class ClientRepository : IClientRepository
     {
         return await _context.Clients.ToListAsync();
     }
+    
+    public async Task<bool> IsLoyalClientAsync(int clientId)
+    {
+        return await _context.Subscriptions
+                   .AnyAsync(c => c.ClientId == clientId)
+               || await _context.Contracts
+                   .AnyAsync(c => c.ClientId == clientId && c.IsPaid);
+    }
 
     public async Task AddAsync(Client client)
     {

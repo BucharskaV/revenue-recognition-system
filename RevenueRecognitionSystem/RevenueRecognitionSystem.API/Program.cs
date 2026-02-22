@@ -12,11 +12,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IContractRepository, ContractRepository>();
+builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
 builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 builder.Services.AddScoped<ISoftwareRepository, SoftwareRepository>();
 
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IContractService, ContractService>();
+builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
 
 builder.Services.AddControllers();
 

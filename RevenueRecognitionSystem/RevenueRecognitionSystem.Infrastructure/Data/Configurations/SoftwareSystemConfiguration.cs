@@ -22,12 +22,16 @@ public class SoftwareSystemConfiguration : IEntityTypeConfiguration<SoftwareSyst
         b.Property(s => s.Category)
             .IsRequired();
         b.Property(s => s.OneYearLicensePrice)
-            .HasPrecision(18, 2);
+            .HasColumnType("decimal(18,2)");
         b.HasMany(c => c.Discounts)
             .WithOne(e => e.SoftwareSystem)
             .HasForeignKey(e => e.SoftwareSystemId)
             .OnDelete(DeleteBehavior.Cascade);
         b.HasMany(c => c.Contracts)
+            .WithOne(e => e.SoftwareSystem)
+            .HasForeignKey(e => e.SoftwareSystemId)
+            .OnDelete(DeleteBehavior.Cascade);
+        b.HasMany(c => c.Subscriptions)
             .WithOne(e => e.SoftwareSystem)
             .HasForeignKey(e => e.SoftwareSystemId)
             .OnDelete(DeleteBehavior.Cascade);

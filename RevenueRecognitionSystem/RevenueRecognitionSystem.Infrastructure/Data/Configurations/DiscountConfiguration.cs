@@ -15,7 +15,7 @@ public class DiscountConfiguration : IEntityTypeConfiguration<Discount>
             .HasMaxLength(50);
         b.Property(s => s.Percentage)
             .IsRequired()
-            .HasPrecision(18, 2);
+            .HasColumnType("decimal(18,2)");
         b.Property(c => c.StartDate)
             .IsRequired()
             .HasColumnType("datetime");

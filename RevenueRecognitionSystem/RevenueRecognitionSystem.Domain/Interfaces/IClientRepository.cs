@@ -10,6 +10,7 @@ public interface IClientRepository
     Task<Individual?> GetIndividualByPeselAsync(string pesel);
     Task<Company?> GetCompanyByKrsNumberAsync(string krs);
     Task<IEnumerable<Client>> GetClientsAsync();
+    public Task<bool> IsLoyalClientAsync(int clientId);
     Task AddAsync(Client client);
     Task UpdateAsync(Client client);
     

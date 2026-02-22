@@ -7,4 +7,5 @@ public abstract class Client
     public string Email { get; set; } = string.Empty;
     public string PhoneNumber { get; set; } = string.Empty;
     public virtual ICollection<Contract> Contracts { get; set; } = [];
+    public virtual ICollection<Subscription> Subscriptions { get; set; } = [];
 }

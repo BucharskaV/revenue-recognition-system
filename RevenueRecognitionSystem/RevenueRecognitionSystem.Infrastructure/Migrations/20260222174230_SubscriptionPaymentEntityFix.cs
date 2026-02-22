@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RevenueRecognitionSystem.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class PaymentLogic : Migration
+    public partial class SubscriptionPaymentEntityFix : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -45,7 +45,7 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                     Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     CurrentVersion = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Category = table.Column<int>(type: "int", nullable: false),
-                    OneYearLicensePrice = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false)
+                    OneYearLicensePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -59,12 +59,12 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ClientId = table.Column<int>(type: "int", nullable: false),
-                    SoftwareSystemId = table.Column<int>(type: "int", maxLength: 20, nullable: false),
+                    SoftwareSystemId = table.Column<int>(type: "int", nullable: false),
                     SoftwareVersion = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     UpdateYears = table.Column<int>(type: "int", nullable: false),
                     IsPaid = table.Column<bool>(type: "bit", nullable: false),
                     IsCancelled = table.Column<bool>(type: "bit", nullable: false)
@@ -93,7 +93,7 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Percentage = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Percentage = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     Target = table.Column<int>(type: "int", nullable: false),
@@ -111,13 +111,44 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Subscriptions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    SoftwareSystemId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    RenewalPeriodInMonths = table.Column<int>(type: "int", nullable: false),
+                    RenewalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    IsCancelled = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Subscriptions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Subscriptions_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Subscriptions_SoftwareSystems_SoftwareSystemId",
+                        column: x => x.SoftwareSystemId,
+                        principalTable: "SoftwareSystems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Payments",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ContractId = table.Column<int>(type: "int", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PaymentDate = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
                 constraints: table =>
@@ -127,6 +158,27 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                         name: "FK_Payments_Contracts_ContractId",
                         column: x => x.ContractId,
                         principalTable: "Contracts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubscriptionPayments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SubscriptionId = table.Column<int>(type: "int", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "datetime", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubscriptionPayments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SubscriptionPayments_Subscriptions_SubscriptionId",
+                        column: x => x.SubscriptionId,
+                        principalTable: "Subscriptions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -187,9 +239,9 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                 columns: new[] { "Id", "ClientId", "CreatedAt", "EndDate", "IsCancelled", "IsPaid", "Price", "SoftwareSystemId", "SoftwareVersion", "StartDate", "UpdateYears" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2026, 2, 10, 20, 38, 4, 695, DateTimeKind.Local).AddTicks(8663), new DateTime(2026, 2, 20, 20, 38, 4, 695, DateTimeKind.Local).AddTicks(8713), false, true, 4500m, 1, "1.0", new DateTime(2026, 2, 10, 20, 38, 4, 695, DateTimeKind.Local).AddTicks(8711), 1 },
-                    { 2, 2, new DateTime(2026, 2, 10, 20, 38, 4, 695, DateTimeKind.Local).AddTicks(8720), new DateTime(2046, 2, 10, 20, 38, 4, 695, DateTimeKind.Local).AddTicks(8722), false, true, 6000m, 2, "2.1", new DateTime(2026, 2, 10, 20, 38, 4, 695, DateTimeKind.Local).AddTicks(8721), 2 },
-                    { 3, 3, new DateTime(2026, 2, 10, 20, 38, 4, 695, DateTimeKind.Local).AddTicks(8729), new DateTime(2036, 2, 10, 20, 38, 4, 695, DateTimeKind.Local).AddTicks(8732), false, true, 8500m, 3, "3.2", new DateTime(2026, 2, 10, 20, 38, 4, 695, DateTimeKind.Local).AddTicks(8730), 1 }
+                    { 1, 1, new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1575), new DateTime(2026, 3, 4, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1627), false, true, 4500m, 1, "1.0", new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1626), 1 },
+                    { 2, 2, new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1635), new DateTime(2046, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1638), false, true, 6000m, 2, "2.1", new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1636), 2 },
+                    { 3, 3, new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1644), new DateTime(2036, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1646), false, true, 8500m, 3, "3.2", new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1645), 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -207,6 +259,16 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                     { 8, new DateTime(2026, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Auto Deal", 7m, 8, new DateTime(2026, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2 },
                     { 9, new DateTime(2026, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "HR Promo", 6m, 9, new DateTime(2026, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2 },
                     { 10, new DateTime(2026, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Security Week", 25m, 10, new DateTime(2026, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Subscriptions",
+                columns: new[] { "Id", "ClientId", "IsCancelled", "Name", "RenewalPeriodInMonths", "RenewalPrice", "SoftwareSystemId", "StartDate" },
+                values: new object[,]
+                {
+                    { 1, 1, true, "Monthly Subscription", 1, 900m, 1, new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1670) },
+                    { 2, 2, true, "Monthly Subscription", 1, 1200m, 2, new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1674) },
+                    { 3, 3, true, "2 Years Subscription", 24, 8000m, 3, new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1679) }
                 });
 
             migrationBuilder.CreateIndex(
@@ -228,6 +290,21 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                 name: "IX_Payments_ContractId",
                 table: "Payments",
                 column: "ContractId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubscriptionPayments_SubscriptionId",
+                table: "SubscriptionPayments",
+                column: "SubscriptionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Subscriptions_ClientId",
+                table: "Subscriptions",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Subscriptions_SoftwareSystemId",
+                table: "Subscriptions",
+                column: "SoftwareSystemId");
         }
 
         /// <inheritdoc />
@@ -240,7 +317,13 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                 name: "Payments");
 
             migrationBuilder.DropTable(
+                name: "SubscriptionPayments");
+
+            migrationBuilder.DropTable(
                 name: "Contracts");
+
+            migrationBuilder.DropTable(
+                name: "Subscriptions");
 
             migrationBuilder.DropTable(
                 name: "Clients");

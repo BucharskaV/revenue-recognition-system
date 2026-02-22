@@ -4,11 +4,11 @@ using RevenueRecognitionSystem.Domain.Entities;
 
 namespace RevenueRecognitionSystem.Infrastructure.Data.Configurations;
 
-public class ContractConfiguration : IEntityTypeConfiguration<Contract>
+public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
 {
-    public void Configure(EntityTypeBuilder<Contract> b)
+    public void Configure(EntityTypeBuilder<Subscription> b)
     {
-        b.ToTable("Contracts");
+        b.ToTable("Subscriptions");
         b.HasKey(c => c.Id);
         b.Property(c => c.SoftwareSystemId)
             .IsRequired();
@@ -17,21 +17,18 @@ public class ContractConfiguration : IEntityTypeConfiguration<Contract>
         b.Property(c => c.StartDate)
             .IsRequired()
             .HasColumnType("datetime");
-        b.Property(c => c.EndDate)
-            .IsRequired()
-            .HasColumnType("datetime");
-        b.Property(c => c.CreatedAt)
-            .IsRequired()
-            .HasColumnType("datetime");
-        b.Property(c => c.Price)
+        b.Property(c => c.RenewalPrice)
             .IsRequired()
             .HasColumnType("decimal(18,2)");
-        b.Property(c => c.UpdateYears)
+        b.Property(c => c.Name)
+            .IsRequired()
+            .HasMaxLength(20);
+        b.Property(c => c.RenewalPeriodInMonths)
             .IsRequired()
             .HasColumnType("int");
-        b.HasMany(c => c.Payments)
-            .WithOne(e => e.Contract)
-            .HasForeignKey(e => e.ContractId)
+        b.HasMany(c => c.SubscriptionPayments)
+            .WithOne(e => e.Subscription)
+            .HasForeignKey(e => e.SubscriptionId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -16,6 +16,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<Discount> Discounts { get; set; }
     public DbSet<Contract> Contracts { get; set; }
     public DbSet<Payment> Payments { get; set; }
+    public DbSet<Subscription> Subscriptions { get; set; }
+    public DbSet<SubscriptionPayment> SubscriptionPayments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -26,6 +28,8 @@ public class ApplicationDbContext : DbContext
         modelBuilder.ApplyConfiguration(new DiscountConfiguration());
         modelBuilder.ApplyConfiguration(new ContractConfiguration());
         modelBuilder.ApplyConfiguration(new PaymentConfiguration());
+        modelBuilder.ApplyConfiguration(new SubscriptionConfiguration());
+        modelBuilder.ApplyConfiguration(new SubscriptionPaymentConfiguration());
             
         insertInitialData(modelBuilder);
     }
@@ -88,6 +92,12 @@ public class ApplicationDbContext : DbContext
             new Contract { Id = 1, ClientId = 1, SoftwareSystemId = 1, SoftwareVersion = "1.0", CreatedAt = DateTime.Now, StartDate = DateTime.Now, EndDate = DateTime.Now.AddDays(10), Price = 4500, UpdateYears = 1, IsPaid = true, IsCancelled = false },
             new Contract { Id = 2, ClientId = 2, SoftwareSystemId = 2, SoftwareVersion = "2.1", CreatedAt = DateTime.Now, StartDate = DateTime.Now, EndDate = DateTime.Now.AddYears(20), Price = 6000, UpdateYears = 2, IsPaid = true, IsCancelled = false },
             new Contract { Id = 3, ClientId = 3, SoftwareSystemId = 3, SoftwareVersion = "3.2", CreatedAt = DateTime.Now, StartDate = DateTime.Now, EndDate = DateTime.Now.AddYears(10), Price = 8500, UpdateYears = 1, IsPaid = true, IsCancelled = false }
+        );
+
+        modelBuilder.Entity<Subscription>().HasData(
+            new Subscription {Id = 1, ClientId = 1, SoftwareSystemId = 1, Name = "Monthly Subscription", RenewalPeriodInMonths = 1, RenewalPrice = 900, StartDate = DateTime.Now, IsCancelled = true},
+            new Subscription {Id = 2, ClientId = 2, SoftwareSystemId = 2, Name = "Monthly Subscription", RenewalPeriodInMonths = 1, RenewalPrice = 1200, StartDate = DateTime.Now, IsCancelled = true},
+            new Subscription {Id = 3, ClientId = 3, SoftwareSystemId = 3, Name = "2 Years Subscription", RenewalPeriodInMonths = 24, RenewalPrice = 8000, StartDate = DateTime.Now, IsCancelled = true}
         );
     }
 

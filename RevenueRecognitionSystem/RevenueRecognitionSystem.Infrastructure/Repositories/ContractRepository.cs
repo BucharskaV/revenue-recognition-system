@@ -41,12 +41,6 @@ public class ContractRepository : IContractRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<bool> HasAnyPreviousContractsAsync(int clientId)
-    {
-        return await _context.Contracts.AnyAsync(c =>
-            c.ClientId == clientId && c.IsPaid);
-    }
-
     public async Task<bool> HasActiveContractsAsync(int clientId, int softwareId)
     {
         var now = DateTime.UtcNow;
