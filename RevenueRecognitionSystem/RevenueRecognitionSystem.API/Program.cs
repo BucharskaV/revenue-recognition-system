@@ -1,4 +1,7 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using RevenueRecognitionSystem.Domain.Interfaces;
 using RevenueRecognitionSystem.Infrastructure.Data;
 using RevenueRecognitionSystem.Infrastructure.Repositories;
@@ -25,12 +28,53 @@ builder.Services.AddScoped<IRevenueCalculationService, RevenueCalculationService
 
 builder.Services.AddControllers();
 
+builder.Services.AddAuthentication(options =>  
+{  
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;  
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;  
+}).AddJwtBearer(opt =>  
+{  
+    opt.TokenValidationParameters = new TokenValidationParameters  
+    {  
+        ValidateIssuer = true,   
+        ValidateAudience = true, 
+        ValidateLifetime = true,  
+        ClockSkew = TimeSpan.FromMinutes(2),  
+        ValidIssuer = "https://localhost:5001", 
+        ValidAudience = "https://localhost:5001", 
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["SecretKey"]))  
+    };  
+    opt.Events = new JwtBearerEvents  
+    {  
+        OnAuthenticationFailed = context =>  
+        {  
+            if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))  
+            {                
+                context.Response.Headers.Add("Token-expired", "true");  
+            }            
+            
+            return Task.CompletedTask;  
+        }    
+    };
+}).AddJwtBearer("IgnoreTokenExpirationScheme",opt =>  
+{  
+    opt.TokenValidationParameters = new TokenValidationParameters  
+    {  
+        ValidateIssuer = true,   
+        ValidateAudience = true,  
+        ValidateLifetime = false,  
+        ClockSkew = TimeSpan.FromMinutes(2),  
+        ValidIssuer = "https://localhost:5001", 
+        ValidAudience = "https://localhost:5001", 
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["SecretKey"]))  
+    };
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

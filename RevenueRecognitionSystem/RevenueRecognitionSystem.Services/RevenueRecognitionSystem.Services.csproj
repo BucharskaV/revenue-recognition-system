@@ -14,4 +14,8 @@
       <ProjectReference Include="..\RevenueRecognitionSystem.Domain\RevenueRecognitionSystem.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="8.0.24" />
+    </ItemGroup>
+
 </Project>
