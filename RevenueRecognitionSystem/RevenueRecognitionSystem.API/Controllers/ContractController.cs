@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RevenueRecognitionSystem.Domain.Exceptions;
 using RevenueRecognitionSystem.Domain.Exceptions.Contract;
 using RevenueRecognitionSystem.Domain.Exceptions.Payment;
@@ -10,7 +11,8 @@ using RevenueRecognitionSystem.Services.Interfaces;
 namespace RevenueRecognitionSystem.API.Controllers;
 
 [ApiController]
-[Route("/contracts")]
+[Route("api/contracts")]
+[Authorize]
 public class ContractController : ControllerBase
 {
     private readonly IContractService _contractService;

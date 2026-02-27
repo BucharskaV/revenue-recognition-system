@@ -8,7 +8,7 @@ public class Employee
     public string Login { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
     public string Salt { get; set; } = string.Empty;
-    public string RefreshToken { get; set; } = string.Empty;
-    public DateTime RefreshTokenExp { get; set; } 
+    public string? RefreshToken { get; set; } = string.Empty;
+    public DateTime? RefreshTokenExp { get; set; } 
     public EmployeeRole Role { get; set; }
 }

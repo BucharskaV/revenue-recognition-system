@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RevenueRecognitionSystem.Services.Contracts.Requests;
 using RevenueRecognitionSystem.Services.Contracts.Responses;
 using RevenueRecognitionSystem.Services.Interfaces;
@@ -6,7 +7,8 @@ using RevenueRecognitionSystem.Services.Interfaces;
 namespace RevenueRecognitionSystem.API.Controllers;
 
 [ApiController]
-[Route("/revenue")]
+[Route("api/revenue")]
+[Authorize]
 public class RevenueController : ControllerBase
 {
     private readonly IRevenueCalculationService _revenueCalculationService;

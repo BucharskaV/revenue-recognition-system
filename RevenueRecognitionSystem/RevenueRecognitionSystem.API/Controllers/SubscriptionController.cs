@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RevenueRecognitionSystem.Domain.Exceptions;
 using RevenueRecognitionSystem.Domain.Exceptions.Contract;
 using RevenueRecognitionSystem.Domain.Exceptions.SoftwareSystem;
@@ -10,7 +11,8 @@ using RevenueRecognitionSystem.Services.Interfaces;
 namespace RevenueRecognitionSystem.API.Controllers;
 
 [ApiController]
-[Route("/subscriptions")]
+[Route("api/subscriptions")]
+[Authorize]
 public class SubscriptionController : ControllerBase
 {
     public readonly ISubscriptionService _subscriptionService;

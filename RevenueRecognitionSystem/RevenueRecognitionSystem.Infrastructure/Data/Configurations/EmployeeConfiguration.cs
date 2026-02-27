@@ -19,10 +19,8 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
             .IsRequired();
         b.Property(e => e.Salt)
             .IsRequired();
-        b.Property(e => e.RefreshToken)
-            .IsRequired();
+        b.Property(e => e.RefreshToken);
         b.Property(e => e.RefreshTokenExp)
-            .IsRequired()
             .HasColumnType("datetime");
     }
 }

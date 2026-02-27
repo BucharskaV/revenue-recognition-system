@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using RevenueRecognitionSystem.Domain.Constants;
 using RevenueRecognitionSystem.Domain.Entities;
 using RevenueRecognitionSystem.Domain.Exceptions;
 using RevenueRecognitionSystem.Services.Contracts.Requests;
@@ -7,7 +9,8 @@ using RevenueRecognitionSystem.Services.Interfaces;
 namespace RevenueRecognitionSystem.API.Controllers;
 
 [ApiController]
-[Route("/clients")]
+[Route("api/clients")]
+[Authorize]
 public class ClientsController : ControllerBase
 {
     private readonly IClientService _clientService;
@@ -95,6 +98,7 @@ public class ClientsController : ControllerBase
         }
     }
     
+    [Authorize(Roles = Roles.Admin)]
     [HttpPut("individual/{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -116,6 +120,7 @@ public class ClientsController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin)]
     [HttpPut("company/{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -137,6 +142,7 @@ public class ClientsController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin)]
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

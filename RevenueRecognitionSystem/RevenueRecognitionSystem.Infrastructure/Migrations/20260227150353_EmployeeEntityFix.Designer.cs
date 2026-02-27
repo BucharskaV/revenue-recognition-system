@@ -12,8 +12,8 @@ using RevenueRecognitionSystem.Infrastructure.Data;
 namespace RevenueRecognitionSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260222174230_SubscriptionPaymentEntityFix")]
-    partial class SubscriptionPaymentEntityFix
+    [Migration("20260227150353_EmployeeEntityFix")]
+    partial class EmployeeEntityFix
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -114,42 +114,42 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                         {
                             Id = 1,
                             ClientId = 1,
-                            CreatedAt = new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1575),
-                            EndDate = new DateTime(2026, 3, 4, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1627),
+                            CreatedAt = new DateTime(2026, 2, 27, 16, 3, 52, 930, DateTimeKind.Local).AddTicks(1800),
+                            EndDate = new DateTime(2026, 3, 9, 16, 3, 52, 930, DateTimeKind.Local).AddTicks(1867),
                             IsCancelled = false,
                             IsPaid = true,
                             Price = 4500m,
                             SoftwareSystemId = 1,
                             SoftwareVersion = "1.0",
-                            StartDate = new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1626),
+                            StartDate = new DateTime(2026, 2, 27, 16, 3, 52, 930, DateTimeKind.Local).AddTicks(1863),
                             UpdateYears = 1
                         },
                         new
                         {
                             Id = 2,
                             ClientId = 2,
-                            CreatedAt = new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1635),
-                            EndDate = new DateTime(2046, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1638),
+                            CreatedAt = new DateTime(2026, 2, 27, 16, 3, 52, 930, DateTimeKind.Local).AddTicks(1876),
+                            EndDate = new DateTime(2046, 2, 27, 16, 3, 52, 930, DateTimeKind.Local).AddTicks(1880),
                             IsCancelled = false,
                             IsPaid = true,
                             Price = 6000m,
                             SoftwareSystemId = 2,
                             SoftwareVersion = "2.1",
-                            StartDate = new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1636),
+                            StartDate = new DateTime(2026, 2, 27, 16, 3, 52, 930, DateTimeKind.Local).AddTicks(1878),
                             UpdateYears = 2
                         },
                         new
                         {
                             Id = 3,
                             ClientId = 3,
-                            CreatedAt = new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1644),
-                            EndDate = new DateTime(2036, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1646),
+                            CreatedAt = new DateTime(2026, 2, 27, 16, 3, 52, 930, DateTimeKind.Local).AddTicks(1889),
+                            EndDate = new DateTime(2036, 2, 27, 16, 3, 52, 930, DateTimeKind.Local).AddTicks(1892),
                             IsCancelled = false,
                             IsPaid = true,
                             Price = 8500m,
                             SoftwareSystemId = 3,
                             SoftwareVersion = "3.2",
-                            StartDate = new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1645),
+                            StartDate = new DateTime(2026, 2, 27, 16, 3, 52, 930, DateTimeKind.Local).AddTicks(1891),
                             UpdateYears = 1
                         });
                 });
@@ -289,6 +289,40 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                             StartDate = new DateTime(2026, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Target = 2
                         });
+                });
+
+            modelBuilder.Entity("RevenueRecognitionSystem.Domain.Entities.Employee", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Login")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RefreshTokenExp")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Salt")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Employees", (string)null);
                 });
 
             modelBuilder.Entity("RevenueRecognitionSystem.Domain.Entities.Payment", b =>
@@ -490,7 +524,7 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                             RenewalPeriodInMonths = 1,
                             RenewalPrice = 900m,
                             SoftwareSystemId = 1,
-                            StartDate = new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1670)
+                            StartDate = new DateTime(2026, 2, 27, 16, 3, 52, 930, DateTimeKind.Local).AddTicks(1924)
                         },
                         new
                         {
@@ -501,7 +535,7 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                             RenewalPeriodInMonths = 1,
                             RenewalPrice = 1200m,
                             SoftwareSystemId = 2,
-                            StartDate = new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1674)
+                            StartDate = new DateTime(2026, 2, 27, 16, 3, 52, 930, DateTimeKind.Local).AddTicks(1929)
                         },
                         new
                         {
@@ -512,7 +546,7 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                             RenewalPeriodInMonths = 24,
                             RenewalPrice = 8000m,
                             SoftwareSystemId = 3,
-                            StartDate = new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1679)
+                            StartDate = new DateTime(2026, 2, 27, 16, 3, 52, 930, DateTimeKind.Local).AddTicks(1934)
                         });
                 });
 

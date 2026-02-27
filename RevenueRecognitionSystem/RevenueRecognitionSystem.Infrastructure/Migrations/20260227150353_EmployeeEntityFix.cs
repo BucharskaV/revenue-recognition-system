@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RevenueRecognitionSystem.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class SubscriptionPaymentEntityFix : Migration
+    public partial class EmployeeEntityFix : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,6 +33,24 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Clients", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Employees",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Login = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Salt = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RefreshTokenExp = table.Column<DateTime>(type: "datetime", nullable: true),
+                    Role = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Employees", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -239,9 +257,9 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                 columns: new[] { "Id", "ClientId", "CreatedAt", "EndDate", "IsCancelled", "IsPaid", "Price", "SoftwareSystemId", "SoftwareVersion", "StartDate", "UpdateYears" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1575), new DateTime(2026, 3, 4, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1627), false, true, 4500m, 1, "1.0", new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1626), 1 },
-                    { 2, 2, new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1635), new DateTime(2046, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1638), false, true, 6000m, 2, "2.1", new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1636), 2 },
-                    { 3, 3, new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1644), new DateTime(2036, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1646), false, true, 8500m, 3, "3.2", new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1645), 1 }
+                    { 1, 1, new DateTime(2026, 2, 27, 16, 3, 52, 930, DateTimeKind.Local).AddTicks(1800), new DateTime(2026, 3, 9, 16, 3, 52, 930, DateTimeKind.Local).AddTicks(1867), false, true, 4500m, 1, "1.0", new DateTime(2026, 2, 27, 16, 3, 52, 930, DateTimeKind.Local).AddTicks(1863), 1 },
+                    { 2, 2, new DateTime(2026, 2, 27, 16, 3, 52, 930, DateTimeKind.Local).AddTicks(1876), new DateTime(2046, 2, 27, 16, 3, 52, 930, DateTimeKind.Local).AddTicks(1880), false, true, 6000m, 2, "2.1", new DateTime(2026, 2, 27, 16, 3, 52, 930, DateTimeKind.Local).AddTicks(1878), 2 },
+                    { 3, 3, new DateTime(2026, 2, 27, 16, 3, 52, 930, DateTimeKind.Local).AddTicks(1889), new DateTime(2036, 2, 27, 16, 3, 52, 930, DateTimeKind.Local).AddTicks(1892), false, true, 8500m, 3, "3.2", new DateTime(2026, 2, 27, 16, 3, 52, 930, DateTimeKind.Local).AddTicks(1891), 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -266,9 +284,9 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
                 columns: new[] { "Id", "ClientId", "IsCancelled", "Name", "RenewalPeriodInMonths", "RenewalPrice", "SoftwareSystemId", "StartDate" },
                 values: new object[,]
                 {
-                    { 1, 1, true, "Monthly Subscription", 1, 900m, 1, new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1670) },
-                    { 2, 2, true, "Monthly Subscription", 1, 1200m, 2, new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1674) },
-                    { 3, 3, true, "2 Years Subscription", 24, 8000m, 3, new DateTime(2026, 2, 22, 18, 42, 30, 179, DateTimeKind.Local).AddTicks(1679) }
+                    { 1, 1, true, "Monthly Subscription", 1, 900m, 1, new DateTime(2026, 2, 27, 16, 3, 52, 930, DateTimeKind.Local).AddTicks(1924) },
+                    { 2, 2, true, "Monthly Subscription", 1, 1200m, 2, new DateTime(2026, 2, 27, 16, 3, 52, 930, DateTimeKind.Local).AddTicks(1929) },
+                    { 3, 3, true, "2 Years Subscription", 24, 8000m, 3, new DateTime(2026, 2, 27, 16, 3, 52, 930, DateTimeKind.Local).AddTicks(1934) }
                 });
 
             migrationBuilder.CreateIndex(
@@ -312,6 +330,9 @@ namespace RevenueRecognitionSystem.Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Discounts");
+
+            migrationBuilder.DropTable(
+                name: "Employees");
 
             migrationBuilder.DropTable(
                 name: "Payments");
