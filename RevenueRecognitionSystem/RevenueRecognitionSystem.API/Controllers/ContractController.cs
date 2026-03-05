@@ -16,10 +16,12 @@ namespace RevenueRecognitionSystem.API.Controllers;
 public class ContractController : ControllerBase
 {
     private readonly IContractService _contractService;
+    private readonly ILogger<ContractController> _logger;
 
-    public ContractController(IContractService contractService)
+    public ContractController(IContractService contractService, ILogger<ContractController> logger)
     {
         _contractService = contractService;
+        _logger = logger;
     }
     
     [HttpGet]
@@ -27,14 +29,9 @@ public class ContractController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<GetAllContractsResponse>> GetClientsAsync()
     {
-        try {
-            var contracts = await _contractService.GetAllContractsAsync();
-            return Ok(contracts);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
+        _logger.LogDebug("Fetching contracts");
+        var contracts = await _contractService.GetAllContractsAsync();
+        return Ok(contracts);
     }
 
     [HttpPost]
@@ -44,23 +41,9 @@ public class ContractController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateUpfrontContract(CreateUpfrontContractRequest request)
     {
-        try
-        {
-            await _contractService.CreateUpfrontContractAsync(request);
-            return Ok();
-        }
-        catch (Exception ex) when (ex is ClientNotFoundException or SoftwareSystemNotFoundException)
-        {
-            return NotFound(new { message = ex.Message });
-        }
-        catch (Exception ex) when (ex is ClientAlreadyHasContractException or InvalidDurationException or InvalidSupportYearsNumberException)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
+        _logger.LogInformation("Adding new contract for the client with id {ClientId}", request.ClientId);
+        await _contractService.CreateUpfrontContractAsync(request);
+        return Ok();
     }
 
     [HttpDelete("{contractId:int}")]
@@ -68,19 +51,9 @@ public class ContractController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteContract(int contractId)
     {
-        try
-        {
-            await _contractService.DeleteUpfrontContractAsync(contractId);
-            return NoContent();
-        }
-        catch (ContractNotFoundException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
+        _logger.LogInformation("Deleting contract with id {ContractId}", contractId);
+        await _contractService.DeleteUpfrontContractAsync(contractId);
+        return NoContent();
     }
     
     [HttpPost("{contractId:int}/payment")]
@@ -90,23 +63,8 @@ public class ContractController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> IssueNewPayment(int contractId, [FromBody] decimal amount)
     {
-        try
-        {
-            await _contractService.IssuePaymentAsync(contractId, amount);
-            return Ok();
-        }
-        catch (ContractNotFoundException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
-        catch (Exception ex) when (ex is ContractIsCancelledException or ContractIsFullyPaidException or ContractHasExpiredException or 
-                                       InvalidPaymentAmountException or TotalPaymentExceedException)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
+        _logger.LogInformation("Issuing paying for the contract with id {ContractId}", contractId);
+        await _contractService.IssuePaymentAsync(contractId, amount);
+        return Ok();
     }
 }

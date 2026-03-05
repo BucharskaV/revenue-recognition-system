@@ -15,11 +15,13 @@ namespace RevenueRecognitionSystem.API.Controllers;
 [Authorize]
 public class SubscriptionController : ControllerBase
 {
-    public readonly ISubscriptionService _subscriptionService;
+    private readonly ISubscriptionService _subscriptionService;
+    private readonly ILogger<SubscriptionController> _logger;
 
-    public SubscriptionController(ISubscriptionService subscriptionService)
+    public SubscriptionController(ISubscriptionService subscriptionService, ILogger<SubscriptionController> logger)
     {
         _subscriptionService = subscriptionService;
+        _logger = logger;
     }
     
     [HttpGet]
@@ -27,14 +29,9 @@ public class SubscriptionController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<GetAllSubscriptionsResponse>> GetSubscriptionsAsync()
     {
-        try {
-            var subscriptions = await _subscriptionService.GetAllSubscriptionsAsync();
-            return Ok(subscriptions);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
+        _logger.LogDebug("Fetch subscriptions");
+        var subscriptions = await _subscriptionService.GetAllSubscriptionsAsync();
+        return Ok(subscriptions);
     }
     
     [HttpPost]
@@ -44,23 +41,9 @@ public class SubscriptionController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateUpfrontContract(CreateSubscriptionRequest request)
     {
-        try
-        {
-            await _subscriptionService.CreateSubscriptionAsync(request);
-            return Ok();
-        }
-        catch (Exception ex) when (ex is ClientNotFoundException or SoftwareSystemNotFoundException)
-        {
-            return NotFound(new { message = ex.Message });
-        }
-        catch (Exception ex) when (ex is ClientAlreadyHasContractException or InvalidRenewalPeriodException)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
+        _logger.LogInformation("Creating new upfront contract for client with id {ClientId}", request.ClientId);
+        await _subscriptionService.CreateSubscriptionAsync(request);
+        return Ok();
     }
     
     [HttpPost("{subscriptionId:int}/payment")]
@@ -70,23 +53,8 @@ public class SubscriptionController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> IssueNewPayment(int subscriptionId, [FromBody] decimal amount)
     {
-        try
-        {
-            await _subscriptionService.PayForRenewalAsync(subscriptionId, amount);
-            return Ok();
-        }
-        catch (SubscriptionNotFoundException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
-        catch (Exception ex) when (ex is SubscriptionIsCancelledException or PaymentOutsidePeriodException or AlreadyPaidPeriodException or 
-                                       PreviousPeriodUnpaidException or IncorrectPaymentAmountException)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
+        _logger.LogInformation("Adding new payment for subscription with id {SubscriptionId}", subscriptionId);
+        await _subscriptionService.PayForRenewalAsync(subscriptionId, amount);
+        return Ok();
     }
 }

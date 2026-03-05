@@ -1,4 +1,5 @@
-﻿using RevenueRecognitionSystem.Domain.Interfaces;
+﻿using Microsoft.Extensions.Logging;
+using RevenueRecognitionSystem.Domain.Interfaces;
 using RevenueRecognitionSystem.Services.Contracts.Requests;
 using RevenueRecognitionSystem.Services.Contracts.Responses;
 using RevenueRecognitionSystem.Services.Interfaces;
@@ -9,11 +10,13 @@ public class RevenueCalculationService : IRevenueCalculationService
 {
     private readonly IRevenueRepository _revenueRepository;
     private readonly IExchangeRateService _exchangeRateService;
+    private readonly ILogger<RevenueCalculationService> _logger;
 
-    public RevenueCalculationService(IRevenueRepository repo, IExchangeRateService exchange)
+    public RevenueCalculationService(IRevenueRepository repo, IExchangeRateService exchange, ILogger<RevenueCalculationService> logger)
     {
         _revenueRepository = repo;
         _exchangeRateService = exchange;
+        _logger = logger;
     }
     
     public async Task<RevenueResponse> CalculateRevenueAsync(RevenueRequest request)
@@ -72,6 +75,7 @@ public class RevenueCalculationService : IRevenueCalculationService
             predictedRevenue /= rate;
         }
         
+        _logger.LogInformation("Revenue calculated successfully");
         return new RevenueResponse
         {
             CurrentRevenue = currentRevenue,

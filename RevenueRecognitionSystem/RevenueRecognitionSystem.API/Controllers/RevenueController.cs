@@ -12,10 +12,12 @@ namespace RevenueRecognitionSystem.API.Controllers;
 public class RevenueController : ControllerBase
 {
     private readonly IRevenueCalculationService _revenueCalculationService;
+    private readonly ILogger<RevenueController> _logger;
 
-    public RevenueController(IRevenueCalculationService revenueCalculationService)
+    public RevenueController(IRevenueCalculationService revenueCalculationService, ILogger<RevenueController> logger)
     {
         _revenueCalculationService = revenueCalculationService;
+        _logger = logger;
     }
     
     [HttpGet]
@@ -23,13 +25,8 @@ public class RevenueController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<RevenueResponse>> GetRevenueAsync([FromQuery] RevenueRequest request)
     {
-        try {
-            var response = await _revenueCalculationService.CalculateRevenueAsync(request);
-            return Ok(response);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
+        _logger.LogInformation("Calculating revenue");
+        var response = await _revenueCalculationService.CalculateRevenueAsync(request);
+        return Ok(response);
     }
 }

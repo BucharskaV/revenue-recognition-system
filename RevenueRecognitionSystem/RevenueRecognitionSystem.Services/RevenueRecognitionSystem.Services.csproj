@@ -17,6 +17,7 @@
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="8.0.24" />
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging" Version="11.0.0-preview.1.26104.118" />
       <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.1.2" />
       <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.1.2" />
     </ItemGroup>

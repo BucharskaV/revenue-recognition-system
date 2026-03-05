@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using RevenueRecognitionSystem.Domain.Entities;
 using RevenueRecognitionSystem.Domain.Exceptions.Employee;
@@ -17,11 +18,13 @@ public class EmployeeService : IEmployeeService
 {
     private readonly IEmployeeRepository _employeeRepository;
     private readonly IConfiguration _configuration;
+    private readonly ILogger<EmployeeService> _logger;
 
-    public EmployeeService(IEmployeeRepository employeeRepository, IConfiguration configuration)
+    public EmployeeService(IEmployeeRepository employeeRepository, IConfiguration configuration, ILogger<EmployeeService> logger)
     {
         _employeeRepository = employeeRepository;
         _configuration = configuration;
+        _logger = logger;
     }
     
     public async Task RegisterEmployeeAsync(RegisterRequest model)
@@ -39,19 +42,24 @@ public class EmployeeService : IEmployeeService
         };
         
         await _employeeRepository.AddEmployeeAsync(employee);
+        _logger.LogInformation("Employee {Login} registered successfully with role {Role}", model.Login, model.Role);
     }
 
     public async Task<LoginResponse> LoginAsync(LoginRequest loginRequest)
     {
         var employee = await _employeeRepository.GetEmployeeByLoginAsync(loginRequest.Login);
         if(employee == null)
+        {
+            _logger.LogWarning("Login failed: user {Login} not found", loginRequest.Login);
             throw new InvalidEmployeeLoginException();
+        }
         
         string passwordHashFromDb = employee.Password;
         string currentHashedPassword = SecurityHelpers.GetHashedPasswordWithSalt(loginRequest.Password, employee.Salt);
 
         if (passwordHashFromDb != currentHashedPassword)
         {
+            _logger.LogWarning("Login failed: incorrect password for user {Login}", loginRequest.Login);
             throw new IncorrectPasswordException();
         }
 
@@ -74,6 +82,7 @@ public class EmployeeService : IEmployeeService
         employee.RefreshTokenExp = DateTime.Now.AddDays(1);
         await _employeeRepository.SaveChangesAsync();
 
+        _logger.LogInformation("User {Login} logged in successfully", loginRequest.Login);
         return new LoginResponse
         {
             AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
@@ -85,9 +94,13 @@ public class EmployeeService : IEmployeeService
     {
         var employee = await _employeeRepository.GetEmployeeByRefreshTokenAsync(refreshTokenRequest.RefreshToken);
         if(employee == null)
+        {
+            _logger.LogWarning("Invalid refresh token {RefreshToken}", refreshTokenRequest.RefreshToken);
             throw new InvalidEmployeeRefreshTokenException();
+        }
         if (employee.RefreshTokenExp < DateTime.UtcNow)
         {
+            _logger.LogWarning("Invalid refresh token {RefreshToken}", refreshTokenRequest.RefreshToken);
             throw new ExpiredRefreshTokenException();
         }
 
@@ -111,6 +124,7 @@ public class EmployeeService : IEmployeeService
         employee.RefreshTokenExp = DateTime.Now.AddDays(1);
         await _employeeRepository.SaveChangesAsync();
 
+        _logger.LogInformation("Refresh token issued successfully for user {Login}", employee.Login);
         return new RefreshTokenResponse
         {
             AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
@@ -127,5 +141,6 @@ public class EmployeeService : IEmployeeService
         employee.RefreshToken = null;
         employee.RefreshTokenExp = null;
         await _employeeRepository.SaveChangesAsync();
+        _logger.LogInformation("User {Login} logged out successfully", login);
     }
 }

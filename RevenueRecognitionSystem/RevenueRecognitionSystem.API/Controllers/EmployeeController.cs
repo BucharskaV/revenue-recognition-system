@@ -15,10 +15,12 @@ namespace RevenueRecognitionSystem.API.Controllers;
 public class EmployeeController : ControllerBase
 {
     private readonly IEmployeeService _employeeService;
+    private readonly ILogger<EmployeeController> _logger;
 
-    public EmployeeController(IEmployeeService employeeService)
+    public EmployeeController(IEmployeeService employeeService, ILogger<EmployeeController> logger)
     {
         _employeeService = employeeService;
+        _logger = logger;
     }
     
     [AllowAnonymous]
@@ -27,14 +29,9 @@ public class EmployeeController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult> RegisterEmployee(RegisterRequest model)
     {
-        try {
-            await _employeeService.RegisterEmployeeAsync(model);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
+        _logger.LogInformation("Registering new employee");
+        await _employeeService.RegisterEmployeeAsync(model);
+        return Ok();
     }
 
     [AllowAnonymous]
@@ -44,19 +41,9 @@ public class EmployeeController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult> Login(LoginRequest model)
     {
-        try
-        {
-            var response = await _employeeService.LoginAsync(model);
-            return Ok(response);
-        }
-        catch (Exception ex)when (ex is InvalidEmployeeLoginException or IncorrectPasswordException)
-        {
-            return Unauthorized(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
+        _logger.LogInformation("Logining employee");
+        var response = await _employeeService.LoginAsync(model);
+        return Ok(response);
     }
     
     [AllowAnonymous]
@@ -67,23 +54,9 @@ public class EmployeeController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult> Refresh(RefreshTokenRequest model)
     {
-        try
-        {
-            var response = await _employeeService.RefreshTokenAsync(model);
-            return Ok(response);
-        }
-        catch (InvalidEmployeeRefreshTokenException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
-        catch (ExpiredRefreshTokenException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
+        _logger.LogInformation("Refreshing tocken");
+        var response = await _employeeService.RefreshTokenAsync(model);
+        return Ok(response);
     }
     
     [HttpPost("logout")]
@@ -92,21 +65,10 @@ public class EmployeeController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Logout()
     {
-        try
-        {
-            var login = User.Identity?.Name;
-            if (login == null)
-                return Unauthorized();
-            await _employeeService.LogoutAsync(login);
-            return Ok();
-        }
-        catch (InvalidEmployeeLoginException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
+        var login = User.Identity?.Name;
+        if (login == null)
+            return Unauthorized();
+        await _employeeService.LogoutAsync(login);
+        return Ok();
     }
 }

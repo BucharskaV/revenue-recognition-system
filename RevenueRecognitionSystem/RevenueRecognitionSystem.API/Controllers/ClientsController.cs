@@ -14,10 +14,12 @@ namespace RevenueRecognitionSystem.API.Controllers;
 public class ClientsController : ControllerBase
 {
     private readonly IClientService _clientService;
+    private readonly ILogger<ClientsController> _logger;
 
-    public ClientsController(IClientService clientService)
+    public ClientsController(IClientService clientService, ILogger<ClientsController> logger)
     {
         _clientService = clientService;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -25,14 +27,9 @@ public class ClientsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<Client>> GetClientsAsync()
     {
-        try {
-            var clients = await _clientService.GetAllClientsAsync();
-            return Ok(clients);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
+        _logger.LogDebug("Fetching clients");
+        var clients = await _clientService.GetAllClientsAsync();
+        return Ok(clients);
     }
     
     [HttpGet("{id:int}")]
@@ -41,19 +38,9 @@ public class ClientsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<Client>> GetClientByIdAsync(int id)
     {
-        try
-        {
-            var client = await _clientService.GetClientAsync(id);
-            return Ok(client);
-        }
-        catch (ClientNotFoundException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
+        _logger.LogInformation("Fetching client with id {ClientId}", id);
+        var client = await _clientService.GetClientAsync(id);
+        return Ok(client);
     }
 
     [HttpPost("individual")]
@@ -62,19 +49,9 @@ public class ClientsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> AddIndividualAsync(AddIndividualRequest request)
     {
-        try
-        {
-             await _clientService.AddIndividualAsync(request);
-            return Ok();
-        }
-        catch (IndividualAlreadyExistsException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
+        _logger.LogInformation("Adding new individual client with PESEL {Pesel}", request.PESEL);
+        await _clientService.AddIndividualAsync(request);
+        return Created();
     }
     
     [HttpPost("company")]
@@ -83,19 +60,9 @@ public class ClientsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> AddCompanyAsync(AddCompanyRequest request)
     {
-        try
-        {
-            await _clientService.AddCompanyAsync(request);
-            return Ok();
-        }
-        catch (CompanyAlreadyExistsException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
+        _logger.LogInformation("Adding new company with KRS {KRS}", request.KRSNumber);
+        await _clientService.AddCompanyAsync(request);
+        return Created();
     }
     
     [Authorize(Roles = Roles.Admin)]
@@ -105,19 +72,9 @@ public class ClientsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> UpdateIndividualAsync(int id, UpdateIndividualRequest request)
     {
-        try
-        {
-            await _clientService.UpdateIndividualAsync(id, request);
-            return NoContent();
-        }
-        catch (ClientNotFoundException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
+        _logger.LogInformation("Updating individual client with id {id}", id);
+        await _clientService.UpdateIndividualAsync(id, request);
+        return NoContent();
     }
 
     [Authorize(Roles = Roles.Admin)]
@@ -127,19 +84,9 @@ public class ClientsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> UpdateCompanyAsync(int id, UpdateCompanyRequest request)
     {
-        try
-        {
-            await _clientService.UpdateCompanyAsync(id, request);
-            return NoContent();
-        }
-        catch (ClientNotFoundException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
+        _logger.LogInformation("Updating company with id {id}", id);
+        await _clientService.UpdateCompanyAsync(id, request);
+        return NoContent();
     }
 
     [Authorize(Roles = Roles.Admin)]
@@ -150,22 +97,8 @@ public class ClientsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> DeleteClientAsync(int id)
     {
-        try
-        {
-            await _clientService.DeleteClientAsync(id);
-            return NoContent();
-        }
-        catch (ClientNotFoundException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
-        catch (CompanyCantBeRemovedException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
+        _logger.LogInformation("Deleting client with id {id}", id);
+        await _clientService.DeleteClientAsync(id);
+        return NoContent();
     }
 }
