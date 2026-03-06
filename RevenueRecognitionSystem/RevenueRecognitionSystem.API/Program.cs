@@ -37,6 +37,8 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 builder.Services.AddAuthentication(options =>  
 {  
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;  

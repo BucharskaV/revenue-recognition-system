@@ -1,4 +1,5 @@
-﻿using RevenueRecognitionSystem.Domain.Entities;
+﻿using AutoMapper;
+using RevenueRecognitionSystem.Domain.Entities;
 using RevenueRecognitionSystem.Domain.Exceptions;
 using RevenueRecognitionSystem.Domain.Interfaces;
 using RevenueRecognitionSystem.Services.Contracts.Requests;
@@ -13,10 +14,13 @@ public class ClientService : IClientService
 {
     private readonly IClientRepository _clientRepository;
     private readonly ILogger<ClientService> _logger;
+    private readonly IMapper _mapper;
 
-    public ClientService(IClientRepository clientRepository)
+    public ClientService(IClientRepository clientRepository, ILogger<ClientService> logger, IMapper mapper)
     {
         _clientRepository = clientRepository;
+        _logger = logger;
+        _mapper = mapper;
     }
 
     public async Task<Client?> GetClientAsync(int id)
@@ -35,7 +39,7 @@ public class ClientService : IClientService
     {
         var clients = await _clientRepository.GetClientsAsync();
         _logger.LogInformation("{Count} clients fetched", clients.Count());
-        return clients.Select(ClientMapper.ToResponse);
+        return _mapper.Map<IEnumerable<GetAllClientsResponse>>(clients);
     }
 
     public async Task AddIndividualAsync(AddIndividualRequest request)
@@ -45,7 +49,7 @@ public class ClientService : IClientService
             _logger.LogWarning("Individual with PESEL {PESEL} already exists", request.PESEL);
             throw new IndividualAlreadyExistsException(request.PESEL);
         }
-        var client = ClientMapper.ToEntity(request);
+        var client =  _mapper.Map<Individual>(request);
         await _clientRepository.AddAsync(client);
         _logger.LogWarning("Individual with PESEL {PESEL} already exists", request.PESEL);
     }
@@ -57,7 +61,7 @@ public class ClientService : IClientService
             _logger.LogWarning("Company with KRS {KRSNumber} already exists", request.KRSNumber);
             throw new CompanyAlreadyExistsException(request.KRSNumber);
         }
-        var client = ClientMapper.ToEntity(request);
+        var client = _mapper.Map<Company>(request);
         await _clientRepository.AddAsync(client);
         _logger.LogWarning("Company with KRS {KRSNumber} already exists", request.KRSNumber);
     }

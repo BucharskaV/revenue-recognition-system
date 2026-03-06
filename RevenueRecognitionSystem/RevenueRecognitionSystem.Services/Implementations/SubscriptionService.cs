@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using RevenueRecognitionSystem.Domain.Entities;
 using RevenueRecognitionSystem.Domain.Exceptions;
 using RevenueRecognitionSystem.Domain.Exceptions.Contract;
@@ -20,9 +21,10 @@ public class SubscriptionService : ISubscriptionService
     private readonly IDiscountRepository _discountRepository;
     private readonly IClientRepository _clientRepository;
     private readonly ILogger<SubscriptionService> _logger;
+    private readonly IMapper _mapper;
 
     public SubscriptionService(ISubscriptionRepository subscriptionRepository, IContractRepository contractRepository, ISoftwareRepository softwareRepository,
-        IDiscountRepository discountRepository, IClientRepository clientRepository, ILogger<SubscriptionService> logger)
+        IDiscountRepository discountRepository, IClientRepository clientRepository, ILogger<SubscriptionService> logger, IMapper mapper)
     {
         _subscriptionRepository = subscriptionRepository;
         _contractRepository = contractRepository;
@@ -30,6 +32,7 @@ public class SubscriptionService : ISubscriptionService
         _discountRepository = discountRepository;
         _clientRepository = clientRepository;
         _logger = logger;
+        _mapper = mapper;
     }
     
     public async Task CreateSubscriptionAsync(CreateSubscriptionRequest request)
@@ -95,7 +98,7 @@ public class SubscriptionService : ISubscriptionService
     public async Task<IEnumerable<GetAllSubscriptionsResponse>> GetAllSubscriptionsAsync()
     {
         var subscriptions = await _subscriptionRepository.GetAllAsync();
-        return subscriptions.Select(SubscriptionMapper.ToResponse);
+        return _mapper.Map<IEnumerable<GetAllSubscriptionsResponse>>(subscriptions);
     }
 
     public async Task PayForRenewalAsync(int subscriptionId, decimal amount)

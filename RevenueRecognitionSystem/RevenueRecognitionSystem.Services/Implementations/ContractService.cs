@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using RevenueRecognitionSystem.Domain.Entities;
 using RevenueRecognitionSystem.Domain.Exceptions;
 using RevenueRecognitionSystem.Domain.Exceptions.Contract;
@@ -19,22 +20,24 @@ public class ContractService : IContractService
     private readonly IDiscountRepository _discountRepository;
     private readonly IClientRepository _clientRepository;
     private readonly ILogger<ContractService> _logger;
+    private readonly IMapper _mapper;
 
     public ContractService(IContractRepository contractRepository, ISoftwareRepository softwareRepository,
-        IDiscountRepository discountRepository, IClientRepository clientRepository, ILogger<ContractService> logger)
+        IDiscountRepository discountRepository, IClientRepository clientRepository, ILogger<ContractService> logger, IMapper mapper)
     {
         _contractRepository = contractRepository;
         _softwareRepository = softwareRepository;
         _discountRepository = discountRepository;
         _clientRepository = clientRepository;
         _logger = logger;
+        _mapper = mapper;
     }
 
     public async Task<IEnumerable<GetAllContractsResponse>> GetAllContractsAsync()
     {
         var contracts = await _contractRepository.GetAllAsync();
         _logger.LogInformation("{Count} contracts fetched", contracts.Count());
-        return contracts.Select(ContractMapper.ToResponse);
+        return _mapper.Map<IEnumerable<GetAllContractsResponse>>(contracts);
     }
 
     public async Task CreateUpfrontContractAsync(CreateUpfrontContractRequest request)
