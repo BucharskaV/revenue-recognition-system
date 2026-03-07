@@ -2,7 +2,7 @@
 
 namespace RevenueRecognitionSystem.Services.Contracts.Responses;
 
-public class GetAllClientsResponse
+public class GetClientResponse
 {
     public int Id { get; set; }
     public string Address { get; set; } = string.Empty;

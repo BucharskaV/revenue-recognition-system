@@ -14,6 +14,9 @@ public class ContractConfiguration : IEntityTypeConfiguration<Contract>
             .IsRequired();
         b.Property(c => c.ClientId)
             .IsRequired();
+        b.Property(c => c.SoftwareVersion)
+            .IsRequired()
+            .HasMaxLength(50);
         b.Property(c => c.StartDate)
             .IsRequired()
             .HasColumnType("datetime");

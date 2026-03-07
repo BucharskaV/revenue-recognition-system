@@ -4,6 +4,7 @@ using RevenueRecognitionSystem.Domain.Constants;
 using RevenueRecognitionSystem.Domain.Entities;
 using RevenueRecognitionSystem.Domain.Exceptions;
 using RevenueRecognitionSystem.Services.Contracts.Requests;
+using RevenueRecognitionSystem.Services.Contracts.Responses;
 using RevenueRecognitionSystem.Services.Interfaces;
 
 namespace RevenueRecognitionSystem.API.Controllers;
@@ -25,7 +26,7 @@ public class ClientsController : ControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<Client>> GetClientsAsync()
+    public async Task<ActionResult<GetClientResponse>> GetClientsAsync()
     {
         _logger.LogDebug("Fetching clients");
         var clients = await _clientService.GetAllClientsAsync();
@@ -36,7 +37,7 @@ public class ClientsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<Client>> GetClientByIdAsync(int id)
+    public async Task<ActionResult<GetClientResponse>> GetClientByIdAsync(int id)
     {
         _logger.LogInformation("Fetching client with id {ClientId}", id);
         var client = await _clientService.GetClientAsync(id);

@@ -4,6 +4,7 @@ using RevenueRecognitionSystem.Domain.Exceptions;
 using RevenueRecognitionSystem.Domain.Exceptions.Contract;
 using RevenueRecognitionSystem.Domain.Exceptions.Employee;
 using RevenueRecognitionSystem.Domain.Exceptions.Payment;
+using RevenueRecognitionSystem.Domain.Exceptions.Revenue;
 using RevenueRecognitionSystem.Domain.Exceptions.SoftwareSystem;
 using RevenueRecognitionSystem.Domain.Exceptions.Subscription;
 
@@ -78,6 +79,7 @@ public class ExceptionMiddleware
                 or AlreadyPaidPeriodException
                 or PreviousPeriodUnpaidException
                 or IncorrectPaymentAmountException
+                or InvalidCurrencyException
                 => HttpStatusCode.BadRequest,
 
             ClientNotFoundException

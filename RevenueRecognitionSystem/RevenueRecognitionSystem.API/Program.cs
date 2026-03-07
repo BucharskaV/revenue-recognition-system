@@ -8,8 +8,12 @@ using RevenueRecognitionSystem.Infrastructure.Repositories;
 using RevenueRecognitionSystem.Services.Implementations;
 using RevenueRecognitionSystem.Services.Interfaces;
 using System.Text.Json.Serialization;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
+using RevenueRecognitionSystem.API.Filters;
 using RevenueRecognitionSystem.API.Middleware;
+using RevenueRecognitionSystem.Services.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,11 +35,18 @@ builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
 builder.Services.AddHttpClient<IExchangeRateService, ExchangeRateService>();
 builder.Services.AddScoped<IRevenueCalculationService, RevenueCalculationService>();
 
-builder.Services.AddControllers()
+builder.Services.AddControllers(options =>
+    {
+        options.Filters.Add<LoggingFilter>();
+        options.Filters.Add<ValidateModelFilter>();
+    })
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<AddCompanyRequestValidator>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

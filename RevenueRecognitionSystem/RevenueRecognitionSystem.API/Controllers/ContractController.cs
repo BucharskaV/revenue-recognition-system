@@ -27,7 +27,7 @@ public class ContractController : ControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<GetAllContractsResponse>> GetClientsAsync()
+    public async Task<ActionResult<GetAllContractsResponse>> GetContractsAsync()
     {
         _logger.LogDebug("Fetching contracts");
         var contracts = await _contractService.GetAllContractsAsync();

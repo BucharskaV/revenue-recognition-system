@@ -23,7 +23,7 @@ public class ClientService : IClientService
         _mapper = mapper;
     }
 
-    public async Task<Client?> GetClientAsync(int id)
+    public async Task<GetClientResponse?> GetClientAsync(int id)
     {
         var client = await _clientRepository.GetClientByIdAsync(id);
         if (client is null)
@@ -32,14 +32,14 @@ public class ClientService : IClientService
             throw new ClientNotFoundException(id);
         }
         _logger.LogInformation("Client with ID {Id} found: {ClientType}", id, client.GetType().Name);
-        return client;
+        return _mapper.Map<GetClientResponse>(client);
     }
 
-    public async Task<IEnumerable<GetAllClientsResponse>> GetAllClientsAsync()
+    public async Task<IEnumerable<GetClientResponse>> GetAllClientsAsync()
     {
         var clients = await _clientRepository.GetClientsAsync();
         _logger.LogInformation("{Count} clients fetched", clients.Count());
-        return _mapper.Map<IEnumerable<GetAllClientsResponse>>(clients);
+        return _mapper.Map<IEnumerable<GetClientResponse>>(clients);
     }
 
     public async Task AddIndividualAsync(AddIndividualRequest request)
@@ -51,7 +51,7 @@ public class ClientService : IClientService
         }
         var client =  _mapper.Map<Individual>(request);
         await _clientRepository.AddAsync(client);
-        _logger.LogWarning("Individual with PESEL {PESEL} already exists", request.PESEL);
+        _logger.LogInformation("Individual client with PESEL {PESEL} added successfully", request.PESEL);
     }
 
     public async Task AddCompanyAsync(AddCompanyRequest request)
@@ -63,7 +63,7 @@ public class ClientService : IClientService
         }
         var client = _mapper.Map<Company>(request);
         await _clientRepository.AddAsync(client);
-        _logger.LogWarning("Company with KRS {KRSNumber} already exists", request.KRSNumber);
+        _logger.LogInformation("Company with KRS {KRSNumber} added successfully", request.KRSNumber);
     }
 
     public async Task UpdateIndividualAsync(int id, UpdateIndividualRequest request)

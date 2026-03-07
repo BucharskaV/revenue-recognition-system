@@ -12,6 +12,6 @@ public class ClientMappingProfile : Profile
         CreateMap<AddIndividualRequest, Individual>();
         CreateMap<AddCompanyRequest, Company>();
 
-        CreateMap<Client, GetAllClientsResponse>();
+        CreateMap<Client, GetClientResponse>();
     }
 }

@@ -12,9 +12,11 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
         b.ToTable("Employees");
         b.HasKey(e => e.Id);
         b.Property(e => e.Login)
-            .IsRequired();
+            .IsRequired()
+            .HasMaxLength(20);
         b.Property(e => e.Password)
-            .IsRequired();
+            .IsRequired()
+            .HasMaxLength(20);
         b.Property(e => e.Role)
             .IsRequired();
         b.Property(e => e.Salt)

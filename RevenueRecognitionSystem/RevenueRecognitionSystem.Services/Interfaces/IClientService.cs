@@ -6,8 +6,8 @@ namespace RevenueRecognitionSystem.Services.Interfaces;
 
 public interface IClientService
 {
-    Task<Client?> GetClientAsync(int id);
-    Task<IEnumerable<GetAllClientsResponse>> GetAllClientsAsync();
+    Task<GetClientResponse?> GetClientAsync(int id);
+    Task<IEnumerable<GetClientResponse>> GetAllClientsAsync();
     Task AddIndividualAsync(AddIndividualRequest request);
     Task AddCompanyAsync(AddCompanyRequest request);
     Task UpdateIndividualAsync(int id, UpdateIndividualRequest request);
