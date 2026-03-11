@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevenueRecognitionSystem.Se
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevenueRecognitionSystem.Domain", "RevenueRecognitionSystem.Domain\RevenueRecognitionSystem.Domain.csproj", "{4AA444D6-9DED-4F72-8AFF-59C77D73B5C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevenueRecognitionSystem.Common", "RevenueRecognitionSystem.Common\RevenueRecognitionSystem.Common.csproj", "{0A045C21-9B17-4498-83C7-C5E39E94983D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevenueRecognitionSystem.Tests", "RevenueRecognitionSystem.Tests\RevenueRecognitionSystem.Tests.csproj", "{05C59121-4CD2-4568-A87C-DC38E5C60677}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,9 +32,9 @@ Global
 		{4AA444D6-9DED-4F72-8AFF-59C77D73B5C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4AA444D6-9DED-4F72-8AFF-59C77D73B5C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4AA444D6-9DED-4F72-8AFF-59C77D73B5C0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0A045C21-9B17-4498-83C7-C5E39E94983D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0A045C21-9B17-4498-83C7-C5E39E94983D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0A045C21-9B17-4498-83C7-C5E39E94983D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0A045C21-9B17-4498-83C7-C5E39E94983D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05C59121-4CD2-4568-A87C-DC38E5C60677}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05C59121-4CD2-4568-A87C-DC38E5C60677}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05C59121-4CD2-4568-A87C-DC38E5C60677}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05C59121-4CD2-4568-A87C-DC38E5C60677}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

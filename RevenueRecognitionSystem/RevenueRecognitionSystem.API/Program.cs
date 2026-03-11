@@ -18,7 +18,15 @@ using RevenueRecognitionSystem.Services.Validators;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlServerOptions => sqlServerOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,           
+            maxRetryDelay: TimeSpan.FromSeconds(10), 
+            errorNumbersToAdd: null     
+        )
+    )
+);
 
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
@@ -136,5 +144,7 @@ app.UseAuthorization();
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.MapControllers();
+
+app.Urls.Add("http://+:80");
 
 app.Run();
