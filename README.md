@@ -112,7 +112,7 @@ A REST API Application solves the revenue recognition problem, which involves de
 ### Clients
 | Method | Endpoint | Description | RequestBody | ResponseBody |
 |--------|----------|-------------|-------------|-------------|
-| GET | `/api/clients` | Get all clients|-|IEnumerable<GetClientResponse>|
+| GET | `/api/clients` | Get all clients|-|IEnumerable of GetClientResponse|
 | GET | `/api/clients/{id}` | Get client by id |-|GetClientResponse|
 | DELETE | `/api/clients/{id}` | Soft-Delete client |-|-|
 | POST | `/api/clientst/individual` | Add new individual client |AddIndividualRequest|-|
@@ -123,7 +123,7 @@ A REST API Application solves the revenue recognition problem, which involves de
 ### Contracts
 | Method | Endpoint | Description | RequestBody | ResponseBody |
 |--------|----------|-------------|-------------|-------------|
-| GET | `/api/contracts` | Get all contracts|-|IEnumerable<GetAllContractsResponse>|
+| GET | `/api/contracts` | Get all contracts|-|IEnumerable of GetAllContractsResponse|
 | DELETE | `/api/contracts/{contractId}` | Delete contract |-|-|
 | POST | `/api/contracts` | Add new contract |CreateUpfrontContractRequest|-|
 | POST | `/api/contracts/{contractId}/payment` | Add new payment for the contract |-|-|
@@ -131,7 +131,7 @@ A REST API Application solves the revenue recognition problem, which involves de
 ### Subscriptions
 | Method | Endpoint | Description | RequestBody | ResponseBody |
 |--------|----------|-------------|-------------|-------------|
-| GET | `/api/subscriptions` | Get all subscriptions|-|IEnumerable<GetAllSubscriptionsResponse>|
+| GET | `/api/subscriptions` | Get all subscriptions|-|IEnumerable of GetAllSubscriptionsResponse|
 | POST | `/api/subscriptions` | Add new subscription |CreateSubscriptionRequest|-|
 | POST | `/api/subscriptions/{subscriptionId}/payment` | Add new payment for the subscription |-|-|
 
