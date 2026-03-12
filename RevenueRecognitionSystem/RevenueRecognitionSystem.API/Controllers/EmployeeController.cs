@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RevenueRecognitionSystem.Domain.Exceptions.Employee;
 using RevenueRecognitionSystem.Services.Contracts.Requests;
-using RevenueRecognitionSystem.Services.Contracts.Responses;
 using RevenueRecognitionSystem.Services.Interfaces;
 using LoginRequest = RevenueRecognitionSystem.Services.Contracts.Requests.LoginRequest;
 using RegisterRequest = RevenueRecognitionSystem.Services.Contracts.Requests.RegisterRequest;

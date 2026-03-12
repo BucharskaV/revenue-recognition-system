@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RevenueRecognitionSystem.Domain.Exceptions;
-using RevenueRecognitionSystem.Domain.Exceptions.Contract;
-using RevenueRecognitionSystem.Domain.Exceptions.Payment;
-using RevenueRecognitionSystem.Domain.Exceptions.SoftwareSystem;
 using RevenueRecognitionSystem.Services.Contracts.Requests;
 using RevenueRecognitionSystem.Services.Contracts.Responses;
 using RevenueRecognitionSystem.Services.Interfaces;

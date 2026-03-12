@@ -22,10 +22,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="External\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\RevenueRecognitionSystem.Domain\RevenueRecognitionSystem.Domain.csproj" />
     </ItemGroup>
 

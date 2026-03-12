@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RevenueRecognitionSystem.Domain.Constants;
-using RevenueRecognitionSystem.Domain.Entities;
-using RevenueRecognitionSystem.Domain.Exceptions;
 using RevenueRecognitionSystem.Services.Contracts.Requests;
 using RevenueRecognitionSystem.Services.Contracts.Responses;
 using RevenueRecognitionSystem.Services.Interfaces;
