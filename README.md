@@ -1,5 +1,5 @@
 # Revenue Recognition System
-A REST API Application solves the revenue recognition problem, which involves determining when a company can officially record received payments as revenue. More complex financial cases, such as long-term service contracts or subscriptions, require the revenue to be distributed over the specified period. The system helps manage these rules to ensure accurate financial reporting.
+A REST API Application solves the revenue recognition problem, which involves determining when a company can officially record received payments as revenue. More complex financial cases, such as long-term service contracts or subscriptions, require the revenue to be distributed over the specified period. The system helps manage these rules to ensure accurate financial reporting. Additionally, External Exchange Rate Service was implemented to convert revenue to different currencies.
 # Installation instructions
 1. Clone repository
    ```bash
